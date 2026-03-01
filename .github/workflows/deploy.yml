@@ -3,12 +3,6 @@ name: Deploy Visual Labs
 on:
   push:
     branches: ["main"]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 
 jobs:
   build:
@@ -20,8 +14,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          # Cache is disabled to avoid errors if a lockfile is missing
-          # Add a lockfile (package-lock.json) later for faster builds
       - name: Install dependencies
         run: npm install
       - name: Build All Projects
@@ -34,6 +26,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

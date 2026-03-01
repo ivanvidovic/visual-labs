@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projection Pre-Viz Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <svg style="display: none;">
+        <symbol id="icon-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+        <symbol id="icon-eject" viewBox="0 0 24 24"><path d="M5 17h14M12 5l7 7H5L12 5z"/></symbol>
+        <symbol id="icon-play" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z" class="icon-fill"/></symbol>
+        <symbol id="icon-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z" class="icon-fill"/></symbol>
+        <symbol id="icon-restart" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+        <symbol id="icon-speed" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+        <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+        <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></symbol>
+        <symbol id="icon-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></symbol>
+        <symbol id="icon-cube" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></symbol>
+        <symbol id="icon-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+        <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+        <symbol id="icon-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
+        <symbol id="icon-drag" viewBox="0 0 24 24"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></symbol>
+    </svg>
+
+    <div id="drag-overlay" class="drag-overlay">
+        <div class="drag-message">
+            <svg class="drag-icon"><use href="#icon-upload"></use></svg>
+            Drop Videos to Auto-Load Stage
+            <div class="drag-sub">Mapping files matching WALL_N, WALL_E, WALL_S, WALL_W</div>
+        </div>
+    </div>
+
+    <div id="video-container" style="display: none;">
+        <video id="video-north-a" preload="auto" loop muted playsinline crossOrigin="anonymous"></video>
+        <video id="video-east-a" preload="auto" loop muted playsinline crossOrigin="anonymous"></video>
+        <video id="video-south-a" preload="auto" loop muted playsinline crossOrigin="anonymous"></video>
+        <video id="video-west-a" preload="auto" loop muted playsinline crossOrigin="anonymous"></video>
+        <video id="video-north-b" preload="auto" loop muted playsinline crossOrigin="anonymous"></video>
+        <video id="video-east-b" preload="auto" loop muted playsinline crossOrigin="anonymous"></video>
+        <video id="video-south-b" preload="auto" loop muted playsinline crossOrigin="anonymous"></video>
+        <video id="video-west-b" preload="auto" loop muted playsinline crossOrigin="anonymous"></video>
+    </div>
+
+    <div id="view-controls" class="panel">
+        <button id="btn-dim" class="pill"><svg class="btn-icon"><use href="#icon-sun"></use></svg> Light</button>
+        <button id="btn-grid" class="pill"><svg class="btn-icon"><use href="#icon-grid"></use></svg> Grid</button>
+        <button id="btn-cam" class="pill"><svg class="btn-icon"><use href="#icon-cube"></use></svg> Ortho</button>
+        <button id="btn-reset" class="pill"><svg class="btn-icon"><use href="#icon-home"></use></svg> Reset Cam</button>
+    </div>
+
+    <div id="sequence-manager" class="panel vertical-panel">
+        <div class="panel-title">SEQUENCE LAYERS</div>
+        <div class="seq-controls">
+            <select id="select-project" class="pill custom-select">
+                <option value="">-- Saved Timelines --</option>
+            </select>
+            <button id="btn-save-project" class="pill master-btn"><svg class="btn-icon"><use href="#icon-save"></use></svg> Save Timeline As</button>
+        </div>
+        <div id="layer-list"></div>
+        <button id="btn-clear-seq" class="pill danger-btn"><svg class="btn-icon"><use href="#icon-x"></use></svg> Clear Timeline</button>
+    </div>
+
+    <div id="master-ui">
+        <div class="panel unified-nle-bar">
+            
+            <div class="nle-module stage-builder-module">
+                <div class="panel-title-side">STAGE<br>BUILDER</div>
+                
+                <div class="stage-builder-controls">
+                    <div class="sb-row top-row">
+                        <button id="btn-play" class="pill master-btn"><svg class="btn-icon icon-fill"><use href="#icon-play"></use></svg> Preview</button>
+                        <button id="btn-restart" class="pill"><svg class="btn-icon"><use href="#icon-restart"></use></svg> Restart</button>
+                        <button id="btn-speed" class="pill"><svg class="btn-icon"><use href="#icon-speed"></use></svg> 1x</button>
+                        <button id="btn-clear-all" class="pill danger-btn"><svg class="btn-icon"><use href="#icon-x"></use></svg> Clear Stage</button>
+                    </div>
+
+                    <div class="sb-row bottom-row">
+                        <div class="upload-slot" id="slot-north">
+                            <label class="file-upload pill" id="label-north">
+                                <span class="state-load"><svg class="btn-icon"><use href="#icon-upload"></use></svg> N</span>
+                                <span class="state-ready"><svg class="btn-icon"><use href="#icon-check"></use></svg> N</span>
+                                <span class="state-eject"><svg class="btn-icon"><use href="#icon-eject"></use></svg> Eject</span>
+                                <input type="file" id="upload-north" accept="video/mp4,video/webm">
+                            </label>
+                        </div>
+                        <div class="upload-slot" id="slot-east">
+                            <label class="file-upload pill" id="label-east">
+                                <span class="state-load"><svg class="btn-icon"><use href="#icon-upload"></use></svg> E</span>
+                                <span class="state-ready"><svg class="btn-icon"><use href="#icon-check"></use></svg> E</span>
+                                <span class="state-eject"><svg class="btn-icon"><use href="#icon-eject"></use></svg> Eject</span>
+                                <input type="file" id="upload-east" accept="video/mp4,video/webm">
+                            </label>
+                        </div>
+                        <div class="upload-slot" id="slot-south">
+                            <label class="file-upload pill" id="label-south">
+                                <span class="state-load"><svg class="btn-icon"><use href="#icon-upload"></use></svg> S</span>
+                                <span class="state-ready"><svg class="btn-icon"><use href="#icon-check"></use></svg> S</span>
+                                <span class="state-eject"><svg class="btn-icon"><use href="#icon-eject"></use></svg> Eject</span>
+                                <input type="file" id="upload-south" accept="video/mp4,video/webm">
+                            </label>
+                        </div>
+                        <div class="upload-slot" id="slot-west">
+                            <label class="file-upload pill" id="label-west">
+                                <span class="state-load"><svg class="btn-icon"><use href="#icon-upload"></use></svg> W</span>
+                                <span class="state-ready"><svg class="btn-icon"><use href="#icon-check"></use></svg> W</span>
+                                <span class="state-eject"><svg class="btn-icon"><use href="#icon-eject"></use></svg> Eject</span>
+                                <input type="file" id="upload-west" accept="video/mp4,video/webm">
+                            </label>
+                        </div>
+                        <button id="btn-save-scene" class="pill master-btn"><svg class="btn-icon"><use href="#icon-plus"></use></svg> Add to Seq</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vertical-divider"></div>
+
+            <div class="nle-module timeline-side">
+                
+                <div class="seq-controls-col">
+                    <div id="timecode-display" class="pill timecode">00:00:00.00</div>
+                    <button id="btn-seq-play" class="pill master-btn"><svg class="btn-icon icon-fill"><use href="#icon-play"></use></svg> Play Seq</button>
+                </div>
+                
+                <div class="timeline-wrapper">
+                    <div class="timeline-track" id="timeline-track"></div>
+                    <div class="timeline-ruler" id="timeline-ruler" title="Click and drag here to scrub time">
+                        <div class="ruler-notches"></div>
+                    </div>
+                    <div id="playhead"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

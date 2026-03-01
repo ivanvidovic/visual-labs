@@ -6,8 +6,7 @@
   "scripts": {
     "build": "npm run build-porsche && npm run build-previz",
     "build-porsche": "vite build porsche --base=/visual-labs/porsche/ --outDir dist/porsche",
-    "build-previz": "vite build previz --base=/visual-labs/previz/ --outDir dist/previz",
-    "preview": "vite preview"
+    "build-previz": "vite build previz --base=/visual-labs/previz/ --outDir dist/previz"
   },
   "devDependencies": {
     "vite": "^6.0.0"
