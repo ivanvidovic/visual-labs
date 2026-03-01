@@ -21,8 +21,7 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: npm install
-      - name: Build Porsche Lab
-        # This builds Porsche and automatically copies the 'public' folder to 'dist'
+      - name: Build
         run: npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
