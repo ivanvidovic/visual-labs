@@ -20,7 +20,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          # Cache is disabled to avoid errors if a lockfile is missing
+          # Add a lockfile (package-lock.json) later for faster builds
       - name: Install dependencies
         run: npm install
       - name: Build All Projects
