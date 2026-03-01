@@ -1,0 +1,21 @@
+{
+  "name": "visual-labs-collection",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "npm run build-porsche && npm run build-previz",
+    "build-porsche": "vite build porsche --base=/visual-labs/porsche/ --outDir dist/porsche",
+    "build-previz": "vite build previz --base=/visual-labs/previz/ --outDir dist/previz",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "three": "^0.160.0",
+    "jszip": "^3.10.1",
+    "webm-writer": "^0.3.0",
+    "lil-gui": "^0.21.0"
+  }
+}
