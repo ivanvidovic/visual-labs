@@ -1,10 +1,11 @@
 {
-  "name": "visual-labs-collection",
+  "name": "porsche-studio-visual-lab",
   "private": true,
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --base=/visual-labs/",
     "preview": "vite preview"
   },
   "devDependencies": {

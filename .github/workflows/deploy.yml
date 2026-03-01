@@ -1,4 +1,4 @@
-name: Deploy Visual Labs
+name: Deploy Porsche Lab
 
 on:
   push:
