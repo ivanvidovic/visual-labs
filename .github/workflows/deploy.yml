@@ -4,6 +4,11 @@ on:
   push:
     branches: ["main"]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,7 +21,8 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: npm install
-      - name: Build All Projects
+      - name: Build Porsche Lab
+        # This builds Porsche and automatically copies the 'public' folder to 'dist'
         run: npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -26,9 +32,6 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
