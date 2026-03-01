@@ -6,11 +6,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        // Tells Vite exactly where your two HTML files are
+        // Points Vite to both entry points so it builds them in parallel
         main: resolve(__dirname, 'porsche/index.html'),
         previz: resolve(__dirname, 'previz/index.html'),
       },
     },
     outDir: 'dist',
+    emptyOutDir: true,
   },
 })
